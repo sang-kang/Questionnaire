@@ -20,16 +20,29 @@ scalar Date
 type TestChoice {
   userId: ID!
   paperId: ID!
+  questionId: ID!
+  optionId: ID!
   user: User!
   paper: Paper!
   score: Int!
 }
 
+"""option """
+type Option {
+  id: ID!
+  paperId: ID!
+  questionId: ID!
+  question: Question!
+  score: Int!
+  content: String!
+}
+
 """question """
 type Question {
-  questionNum: ID!
+  id: ID!
   paperId: ID!
   paper: Paper!
+  options: [Option!]!
   content: String!
 }
 
@@ -71,19 +84,25 @@ type Query {
   testResults: [TestResult!]!
   question(questionNum: String!, paperId: String!): Question!
   questions: [Question!]!
+  option(optionNum: String!, paperId: String!, questionNum: String!): Option!
+  options: [Option!]!
 }
 
 type Mutation {
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
   removeRecipe(id: String!): Boolean!
-  createUser(createQuestionInput: CreateQuestionInput!): Question!
-  updateUser(questionNum: String!, paperId: String!, updateQuestionInput: UpdateQuestionInput!): Question!
-  removeUser(questionNum: String!, paperId: String!): Question!
+  createUser(createOptionInput: CreateOptionInput!): Option!
+  updateUser(id: String!, updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): User!
   createPaper(createPaperInput: CreatePaperInput!): Paper!
   updatePaper(id: String!, updatePaperInput: UpdatePaperInput!): Paper!
   removePaper(id: String!): Paper!
   updateTestResult(userId: String!, paperId: String!, updateTestResultInput: UpdateTestResultInput!): TestResult!
   removetestResult(userId: String!, paperId: String!): TestResult!
+  updateQuestion(questionNum: String!, paperId: String!, updateQuestionInput: UpdateQuestionInput!): Question!
+  removeQuestion(questionNum: String!, paperId: String!): Question!
+  updateOption(optionNum: String!, paperId: String!, questionNum: String!, updateOptionInput: UpdateOptionInput!): Option!
+  removeOption(optionNum: String!, paperId: String!, questionNum: String!): Option!
 }
 
 input NewRecipeInput {
@@ -92,16 +111,16 @@ input NewRecipeInput {
   ingredients: [String!]!
 }
 
-input CreateQuestionInput {
-  questionNum: String!
+input CreateOptionInput {
+  optionNum: String!
   paperId: String!
+  questionNum: String!
+  score: Int!
   content: String!
 }
 
-input UpdateQuestionInput {
-  questionNum: String
-  paperId: String
-  content: String
+input UpdateUserInput {
+  email: String!
 }
 
 input CreatePaperInput {
@@ -115,6 +134,20 @@ input UpdatePaperInput {
 input UpdateTestResultInput {
   totalScore: Int
   isSubmitted: Boolean
+}
+
+input UpdateQuestionInput {
+  questionNum: String
+  paperId: String
+  content: String
+}
+
+input UpdateOptionInput {
+  optionNum: String
+  paperId: String
+  questionNum: String
+  score: Int
+  content: String
 }
 
 type Subscription {

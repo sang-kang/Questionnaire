@@ -30,41 +30,41 @@ export class QuestionsService {
         return await this.questionRepository.find();
     }
 
-    async findOneBy(questionNum: string, paperId: string): Promise<Question> {
+    async findOneBy(id: string, paperId: string): Promise<Question> {
         const question = await this.questionRepository.findOneBy({
-            questionNum: questionNum,
+            id: id,
             paperId: paperId
         });
 
         if (!question) {
-            throw new NotFoundException(`question num ${questionNum} at paper ${paperId} not found`);
+            throw new NotFoundException(`question num ${id} at paper ${paperId} not found`);
         }
 
         return question;
     }
 
-    async update(questionNum: string, paperId: string, updateQuestionInput: UpdateQuestionInput): Promise<Question> {
+    async update(id: string, paperId: string, updateQuestionInput: UpdateQuestionInput): Promise<Question> {
         const question = await this.questionRepository.findOneBy({
-            questionNum: questionNum,
+            id: id,
             paperId: paperId
         });
 
         if (!question) {
-            throw new NotFoundException(`question num ${questionNum} at paper ${paperId} not found`);
+            throw new NotFoundException(`question num ${id} at paper ${paperId} not found`);
         }
 
         Object.assign(question, updateQuestionInput);
         return await this.questionRepository.save(question);
     }
 
-    async remove(questionNum: string, paperId: string): Promise<Question> {
+    async remove(id: string, paperId: string): Promise<Question> {
         const question = await this.questionRepository.findOneBy({
-            questionNum: questionNum,
+            id: id,
             paperId: paperId
         });
 
         if (!question) {
-            throw new NotFoundException(`question num ${questionNum} at paper ${paperId} not found`);
+            throw new NotFoundException(`question num ${id} at paper ${paperId} not found`);
         }
 
         return await this.questionRepository.remove(question);

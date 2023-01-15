@@ -1,13 +1,14 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Option } from 'src/options/entities/option.entity';
 import { Question } from 'src/questions/entities/question.entity';
 import { TestChoice } from 'src/test-choices/entities/test-choice.entity';
 import { TestResult } from 'src/test-results/entities/test-result.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType({ description: 'paper ' })
 export class Paper {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn({ name: 'id' })
     @Field((type) => ID)
     id: string;
 
@@ -26,4 +27,9 @@ export class Paper {
     @OneToMany(() => Question, (question) => question.paper)
     @Field(() => [Question])
     questions: Question[]
+
+    // @OneToMany(() => Option, (option) => option.paper)
+    // @Field(() => [Option])
+    // options: Option[]
+
 }

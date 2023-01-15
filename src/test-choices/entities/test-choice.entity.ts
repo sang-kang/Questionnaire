@@ -2,29 +2,31 @@ import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Paper } from 'src/papers/entities/paper.entity';
 import { TestResult } from 'src/test-results/entities/test-result.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Option } from 'src/options/entities/option.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
 @ObjectType({ description: 'test_choice ' })
 export class TestChoice {
-    @PrimaryColumn()
+    @PrimaryColumn({ name: "user_id" })
     @Field((type) => ID)
     userId: string
 
-    @PrimaryColumn()
+    @PrimaryColumn({ name: "paper_id" })
     @Field((type) => ID)
     paperId: string;
 
-    // @PrimaryColumn()
-    // @Field((type) => ID)
-    // questionId: string;
+    @PrimaryColumn({ name: "question_id" })
+    @Field((type) => ID)
+    questionId: string;
 
-    // @PrimaryColumn()
-    // @Field((type) => ID)
-    // choiceId: string;
+    @PrimaryColumn({ name: "option_id" })
+    @Field((type) => ID)
+    optionId: string;
 
     @ManyToOne(() => User, (user: User) => user.testChoices)
-    @JoinColumn({ name: "user_id" })    @Field((type) => User)
+    @JoinColumn({ name: "user_id" })
+    @Field((type) => User)
     user: User
 
     @ManyToOne(() => Paper, (paper: Paper) => paper.testChoices)
@@ -33,10 +35,10 @@ export class TestChoice {
     paper: Paper
 
 
-    // @ManyToOne(() => Choice, (choice: Choice) => choice.testChoice)
+    // @OneToOne(() => Option, (option: Option) => option.testChoice)
     // @JoinColumn({ name: "user_id" })
     // @Field((type) => User)
-    // choice: Choice
+    // option: Option
 
 
     @Column()

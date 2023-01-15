@@ -10,6 +10,7 @@ import { PapersModule } from './papers/papers.module';
 import { TestResultsModule } from './test-results/test-results.module';
 import { TestChoicesModule } from './test-choices/test-choices.module';
 import { QuestionsModule } from './questions/questions.module';
+import { OptionsModule } from './options/options.module';
 
 @Module({
   imports: [
@@ -36,7 +37,9 @@ import { QuestionsModule } from './questions/questions.module';
       database: 'postgres',
       autoLoadEntities: true,
       // entities: [Paper],
-      synchronize: true
+      synchronize: true,
+      // dropSchema: true,
+      logging:true
     }),
     RecipesModule,
     UsersModule,
@@ -44,6 +47,7 @@ import { QuestionsModule } from './questions/questions.module';
     TestResultsModule,
     TestChoicesModule,
     QuestionsModule,
+    OptionsModule,
   ],
 })
 export class AppModule { }

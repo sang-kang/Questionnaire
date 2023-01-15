@@ -28,7 +28,7 @@ export class QuestionsResolver {
     }
 
     @Mutation(returns => Question)
-    updateUser(
+    updateQuestion(
         @Args('questionNum') questionNum: string,
         @Args('paperId') paperId: string,
         @Args('updateQuestionInput') updateQuestionInput: UpdateQuestionInput
@@ -37,7 +37,7 @@ export class QuestionsResolver {
     }
 
     @Mutation(returns => Question)
-    removeUser(
+    removeQuestion(
         @Args('questionNum') questionNum: string,
         @Args('paperId') paperId: string,
     ) {

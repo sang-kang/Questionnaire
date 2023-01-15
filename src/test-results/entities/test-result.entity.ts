@@ -6,11 +6,11 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedC
 @Entity()
 @ObjectType({ description: 'test_result ' })
 export class TestResult {
-    @PrimaryColumn()
+    @PrimaryColumn({ name: 'user_id' })
     @Field((type) => ID)
     userId: string;
 
-    @PrimaryColumn()
+    @PrimaryColumn({ name: 'paper_id' })
     @Field((type) => ID)
     paperId: string;
 

@@ -11,6 +11,7 @@ import { PapersModule } from 'src/papers/papers.module';
     TypeOrmModule.forFeature([Question]),
     PapersModule
   ],
-  providers: [QuestionsService, QuestionsResolver]
+  providers: [QuestionsService, QuestionsResolver],
+  exports:[QuestionsService]
 })
 export class QuestionsModule { }
