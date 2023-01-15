@@ -1,7 +1,9 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
+import { type } from 'os';
 import { Paper } from 'src/papers/entities/paper.entity';
+import { TestChoice } from 'src/test-choices/entities/test-choice.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType({ description: 'test_result ' })
@@ -23,6 +25,10 @@ export class TestResult {
     @JoinColumn({ name: "paper_id" })
     @Field((type) => Paper)
     paper: Paper
+
+    @OneToMany(() => TestChoice, (testChoice: TestChoice) => testChoice.testResult)
+    @Field((type) => [TestChoice])
+    testChoices: TestChoice[]
 
     @Column()
     @Field((type) => Int)

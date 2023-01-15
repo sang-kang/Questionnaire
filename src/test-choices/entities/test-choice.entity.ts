@@ -24,22 +24,47 @@ export class TestChoice {
     @Field((type) => ID)
     optionId: string;
 
-    @ManyToOne(() => User, (user: User) => user.testChoices)
-    @JoinColumn({ name: "user_id" })
-    @Field((type) => User)
-    user: User
-
-    @ManyToOne(() => Paper, (paper: Paper) => paper.testChoices)
-    @JoinColumn({ name: "paper_id" })
-    @Field((type) => Paper)
-    paper: Paper
-
-
-    // @OneToOne(() => Option, (option: Option) => option.testChoice)
+    // @ManyToOne(() => User, (user: User) => user.testChoices)
     // @JoinColumn({ name: "user_id" })
     // @Field((type) => User)
-    // option: Option
+    // user: User
 
+    // @ManyToOne(() => Paper, (paper: Paper) => paper.testChoices)
+    // @JoinColumn({ name: "paper_id" })
+    // @Field((type) => Paper)
+    // paper: Paper
+
+    @ManyToOne(() => TestResult, (testResult: TestResult) => testResult.testChoices)
+    @JoinColumn([
+        {
+            name: 'user_id',
+            referencedColumnName: 'userId'
+        },
+        {
+            name: 'paper_id',
+            referencedColumnName: 'paperId'
+        }
+    ])
+    @Field((type) => TestResult)
+    testResult: TestResult
+
+    @OneToOne(() => Option, (option: Option) => option.testChoice)
+    @JoinColumn([
+        {
+            name: 'option_id',
+            referencedColumnName: 'id'
+        },
+        {
+            name: 'paper_id',
+            referencedColumnName: 'paperId'
+        },
+        {
+            name: 'question_id',
+            referencedColumnName: 'questionId'
+        },
+    ])
+    @Field((type) => User)
+    option: Option
 
     @Column()
     @Field(() => Int)

@@ -8,7 +8,7 @@ import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from
 @Entity()
 @ObjectType({ description: 'paper ' })
 export class Paper {
-    @PrimaryColumn({ name: 'id' })
+    @PrimaryColumn({ name: 'id' })  // FIXME: PrimaryGeneratedColumn
     @Field((type) => ID)
     id: string;
 
@@ -19,11 +19,7 @@ export class Paper {
     @OneToMany(() => TestResult, (testResult) => testResult.paper)
     @Field(() => [TestResult])
     testResults: TestResult[]
-
-    @OneToMany(() => TestChoice, (testChoice) => testChoice.paper)
-    @Field(() => [TestChoice])
-    testChoices: TestChoice[]
-
+    
     @OneToMany(() => Question, (question) => question.paper)
     @Field(() => [Question])
     questions: Question[]
