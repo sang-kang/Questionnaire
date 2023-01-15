@@ -16,16 +16,28 @@ type Recipe {
 """Date custom scalar type"""
 scalar Date
 
-"""user """
-type User {
-  id: ID!
-  email: String!
-}
-
 """paper """
 type Paper {
   id: ID!
   name: String!
+  testResults: [TestResult!]!
+}
+
+"""test_result """
+type TestResult {
+  userId: ID!
+  paperId: ID!
+  user: User!
+  paper: Paper!
+  totalScore: Int!
+  isSubmitted: Boolean!
+}
+
+"""user """
+type User {
+  id: ID!
+  email: String!
+  testResults: [TestResult!]!
 }
 
 type Query {
@@ -35,6 +47,8 @@ type Query {
   users: [User!]!
   paper(id: String!): Paper!
   papers: [Paper!]!
+  testResult(userId: String!, paperId: String!): TestResult!
+  testResults: [TestResult!]!
 }
 
 type Mutation {
@@ -46,6 +60,8 @@ type Mutation {
   createPaper(createPaperInput: CreatePaperInput!): Paper!
   updatePaper(id: String!, updatePaperInput: UpdatePaperInput!): Paper!
   removePaper(id: String!): Paper!
+  updateTestResult(userId: String!, paperId: String!, updateTestResultInput: UpdateTestResultInput!): TestResult!
+  removetestResult(userId: String!, paperId: String!): TestResult!
 }
 
 input NewRecipeInput {
@@ -68,6 +84,11 @@ input CreatePaperInput {
 
 input UpdatePaperInput {
   name: String!
+}
+
+input UpdateTestResultInput {
+  totalScore: Int
+  isSubmitted: Boolean
 }
 
 type Subscription {
