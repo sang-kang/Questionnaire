@@ -6,6 +6,7 @@ import { upperDirectiveTransformer } from './common/directives/upper-case-direct
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { RecipesModule } from './recipes/recipes.module';
 import { UsersModule } from './users/users.module';
+import { PapersModule } from './papers/papers.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UsersModule } from './users/users.module';
     }),
     RecipesModule,
     UsersModule,
+    PapersModule,
   ],
 })
 export class AppModule { }

@@ -22,11 +22,19 @@ type User {
   email: String!
 }
 
+"""paper """
+type Paper {
+  id: ID!
+  name: String!
+}
+
 type Query {
   recipe(id: String!): Recipe!
   recipes(skip: Int = 0, take: Int = 25): [Recipe!]!
+  user(id: String!): User!
   users: [User!]!
-  findOne(id: String!): User!
+  paper(id: String!): Paper!
+  papers: [Paper!]!
 }
 
 type Mutation {
@@ -35,6 +43,9 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(id: String!, updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): User!
+  createPaper(createPaperInput: CreatePaperInput!): Paper!
+  updatePaper(id: String!, updatePaperInput: UpdatePaperInput!): Paper!
+  removePaper(id: String!): Paper!
 }
 
 input NewRecipeInput {
@@ -49,6 +60,14 @@ input CreateUserInput {
 
 input UpdateUserInput {
   email: String!
+}
+
+input CreatePaperInput {
+  name: String!
+}
+
+input UpdatePaperInput {
+  name: String!
 }
 
 type Subscription {

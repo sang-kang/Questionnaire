@@ -6,6 +6,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 
 @Resolver(of => User)
 export class UsersResolver {
+
   constructor(private readonly usersService: UsersService) { }
 
   @Mutation(returns => User)
@@ -14,7 +15,7 @@ export class UsersResolver {
   }
 
   @Query(returns => User, { name: 'user' })
-  findOne(@Args('id') id: string) {
+  findOneById(@Args('id') id: string) {
     return this.usersService.findOneById(id);
   }
 
