@@ -16,11 +16,21 @@ type Recipe {
 """Date custom scalar type"""
 scalar Date
 
+"""test_choice """
+type TestChoice {
+  userId: ID!
+  paperId: ID!
+  user: User!
+  paper: Paper!
+  score: Int!
+}
+
 """paper """
 type Paper {
   id: ID!
   name: String!
   testResults: [TestResult!]!
+  testChoices: [TestChoice!]!
 }
 
 """test_result """
@@ -38,6 +48,7 @@ type User {
   id: ID!
   email: String!
   testResults: [TestResult!]!
+  testChoices: [TestChoice!]!
 }
 
 type Query {
