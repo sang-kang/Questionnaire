@@ -25,12 +25,21 @@ type TestChoice {
   score: Int!
 }
 
+"""question """
+type Question {
+  questionNum: ID!
+  paperId: ID!
+  paper: Paper!
+  content: String!
+}
+
 """paper """
 type Paper {
   id: ID!
   name: String!
   testResults: [TestResult!]!
   testChoices: [TestChoice!]!
+  questions: [Question!]!
 }
 
 """test_result """
@@ -60,14 +69,16 @@ type Query {
   papers: [Paper!]!
   testResult(userId: String!, paperId: String!): TestResult!
   testResults: [TestResult!]!
+  question(questionNum: String!, paperId: String!): Question!
+  questions: [Question!]!
 }
 
 type Mutation {
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
   removeRecipe(id: String!): Boolean!
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(id: String!, updateUserInput: UpdateUserInput!): User!
-  removeUser(id: String!): User!
+  createUser(createQuestionInput: CreateQuestionInput!): Question!
+  updateUser(questionNum: String!, paperId: String!, updateQuestionInput: UpdateQuestionInput!): Question!
+  removeUser(questionNum: String!, paperId: String!): Question!
   createPaper(createPaperInput: CreatePaperInput!): Paper!
   updatePaper(id: String!, updatePaperInput: UpdatePaperInput!): Paper!
   removePaper(id: String!): Paper!
@@ -81,12 +92,16 @@ input NewRecipeInput {
   ingredients: [String!]!
 }
 
-input CreateUserInput {
-  email: String!
+input CreateQuestionInput {
+  questionNum: String!
+  paperId: String!
+  content: String!
 }
 
-input UpdateUserInput {
-  email: String!
+input UpdateQuestionInput {
+  questionNum: String
+  paperId: String
+  content: String
 }
 
 input CreatePaperInput {

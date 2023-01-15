@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { PapersModule } from './papers/papers.module';
 import { TestResultsModule } from './test-results/test-results.module';
 import { TestChoicesModule } from './test-choices/test-choices.module';
+import { QuestionsModule } from './questions/questions.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { TestChoicesModule } from './test-choices/test-choices.module';
     PapersModule,
     TestResultsModule,
     TestChoicesModule,
+    QuestionsModule,
   ],
 })
 export class AppModule { }
