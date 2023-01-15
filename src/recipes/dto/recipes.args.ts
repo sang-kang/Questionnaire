@@ -1,6 +1,7 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
 import { Max, Min } from 'class-validator';
 
+// Query parameter
 @ArgsType()
 export class RecipesArgs {
   @Field(type => Int)

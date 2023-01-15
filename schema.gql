@@ -16,20 +16,39 @@ type Recipe {
 """Date custom scalar type"""
 scalar Date
 
+"""user """
+type User {
+  id: ID!
+  email: String!
+}
+
 type Query {
   recipe(id: String!): Recipe!
   recipes(skip: Int = 0, take: Int = 25): [Recipe!]!
+  users: [User!]!
+  findOne(id: String!): User!
 }
 
 type Mutation {
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
   removeRecipe(id: String!): Boolean!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(id: String!, updateUserInput: UpdateUserInput!): User!
+  removeUser(id: String!): User!
 }
 
 input NewRecipeInput {
   title: String!
   description: String
   ingredients: [String!]!
+}
+
+input CreateUserInput {
+  email: String!
+}
+
+input UpdateUserInput {
+  email: String!
 }
 
 type Subscription {
