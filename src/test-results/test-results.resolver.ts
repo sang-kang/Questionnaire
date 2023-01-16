@@ -10,8 +10,8 @@ export class TestResultsResolver {
 
     @Query(returns => TestResult, { name: 'testResult' })
     findOneById(
-        @Args('userId') userId: string,
-        @Args('paperId') paperId: string,
+        @Args('userId') userId: number,
+        @Args('paperId') paperId: number,
     ) {
         return this.testResultService.findOneById(userId, paperId);
     }
@@ -23,8 +23,8 @@ export class TestResultsResolver {
 
     @Mutation(returns => TestResult)
     updateTestResult(
-        @Args('userId') userId: string,
-        @Args('paperId') paperId: string,
+        @Args('userId') userId: number,
+        @Args('paperId') paperId: number,
         @Args('updateTestResultInput') updateTestResultInput: UpdateTestResultInput
     ) {
         return this.testResultService.update(userId, paperId, updateTestResultInput);
@@ -32,8 +32,8 @@ export class TestResultsResolver {
 
     @Mutation(returns => TestResult)
     removetestResult(
-        @Args('userId') userId: string,
-        @Args('paperId') paperId: string,
+        @Args('userId') userId: number,
+        @Args('paperId') paperId: number,
     ) {
         return this.testResultService.remove(userId, paperId);
     }

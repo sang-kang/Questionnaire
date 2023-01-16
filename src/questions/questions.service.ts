@@ -30,41 +30,41 @@ export class QuestionsService {
         return await this.questionRepository.find();
     }
 
-    async findOneBy(id: string, paperId: string): Promise<Question> {
+    async findOneBy(questionNum: number, paperId: number): Promise<Question> {
         const question = await this.questionRepository.findOneBy({
-            id: id,
+            num: questionNum,
             paperId: paperId
         });
 
         if (!question) {
-            throw new NotFoundException(`question num ${id} at paper ${paperId} not found`);
+            throw new NotFoundException(`question num ${questionNum} at paper ${paperId} not found`);
         }
 
         return question;
     }
 
-    async update(id: string, paperId: string, updateQuestionInput: UpdateQuestionInput): Promise<Question> {
+    async update(questionNum: number, paperId: number, updateQuestionInput: UpdateQuestionInput): Promise<Question> {
         const question = await this.questionRepository.findOneBy({
-            id: id,
+            num: questionNum,
             paperId: paperId
         });
 
         if (!question) {
-            throw new NotFoundException(`question num ${id} at paper ${paperId} not found`);
+            throw new NotFoundException(`question num ${questionNum} at paper ${paperId} not found`);
         }
 
         Object.assign(question, updateQuestionInput);
         return await this.questionRepository.save(question);
     }
 
-    async remove(id: string, paperId: string): Promise<Question> {
+    async remove(questionNum: number, paperId: number): Promise<Question> {
         const question = await this.questionRepository.findOneBy({
-            id: id,
+            num: questionNum,
             paperId: paperId
         });
 
         if (!question) {
-            throw new NotFoundException(`question num ${id} at paper ${paperId} not found`);
+            throw new NotFoundException(`question num ${questionNum} at paper ${paperId} not found`);
         }
 
         return await this.questionRepository.remove(question);

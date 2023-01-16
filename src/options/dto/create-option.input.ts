@@ -3,20 +3,16 @@ import { IsString } from 'class-validator';
 
 @InputType()
 export class CreateOptionInput {
-  @Field(type => String)
-  @IsString()
-  optionNum: string;
-
-  @Field(type => String)
-  @IsString()
-  paperId: string;
-
-  @Field(type => String)
-  @IsString()
-  questionNum: string;
+  @Field(type => Int)
+  optionNum: number;
 
   @Field(type => Int)
-  @IsString()
+  paperId: number;
+
+  @Field(type => Int)
+  questionNum: number;
+
+  @Field(type => Int)
   score: number
 
   @Field(type => String)

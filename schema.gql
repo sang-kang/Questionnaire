@@ -18,10 +18,11 @@ scalar Date
 
 """test_choice """
 type TestChoice {
-  userId: ID!
-  paperId: ID!
-  questionId: ID!
-  optionId: ID!
+  testResultUserId: ID!
+  testResultPaperId: ID!
+  optionNum: ID!
+  optionPaperId: ID!
+  optionQuestionNum: ID!
   testResult: TestResult!
   option: User!
   score: Int!
@@ -29,9 +30,9 @@ type TestChoice {
 
 """option """
 type Option {
-  id: ID!
-  paperId: ID!
-  questionId: ID!
+  num: ID!
+  questionNum: ID!
+  questionPaperId: ID!
   question: Question!
   testChoice: TestChoice!
   score: Int!
@@ -40,7 +41,7 @@ type Option {
 
 """question """
 type Question {
-  id: ID!
+  num: ID!
   paperId: ID!
   paper: Paper!
   options: [Option!]!
@@ -76,15 +77,15 @@ type User {
 type Query {
   recipe(id: String!): Recipe!
   recipes(skip: Int = 0, take: Int = 25): [Recipe!]!
-  user(id: String!): User!
+  user(id: Float!): User!
   users: [User!]!
-  paper(id: String!): Paper!
+  paper(id: Float!): Paper!
   papers: [Paper!]!
-  testResult(userId: String!, paperId: String!): TestResult!
+  testResult(userId: Float!, paperId: Float!): TestResult!
   testResults: [TestResult!]!
-  question(questionNum: String!, paperId: String!): Question!
+  question(questionNum: Float!, paperId: Float!): Question!
   questions: [Question!]!
-  option(optionNum: String!, paperId: String!, questionNum: String!): Option!
+  option(optionNum: Float!, questionNum: Float!, paperId: Float!): Option!
   options: [Option!]!
 }
 
@@ -92,17 +93,17 @@ type Mutation {
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
   removeRecipe(id: String!): Boolean!
   createUser(createOptionInput: CreateOptionInput!): Option!
-  updateUser(id: String!, updateUserInput: UpdateUserInput!): User!
-  removeUser(id: String!): User!
+  updateUser(id: Float!, updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Float!): User!
   createPaper(createPaperInput: CreatePaperInput!): Paper!
-  updatePaper(id: String!, updatePaperInput: UpdatePaperInput!): Paper!
-  removePaper(id: String!): Paper!
-  updateTestResult(userId: String!, paperId: String!, updateTestResultInput: UpdateTestResultInput!): TestResult!
-  removetestResult(userId: String!, paperId: String!): TestResult!
-  updateQuestion(questionNum: String!, paperId: String!, updateQuestionInput: UpdateQuestionInput!): Question!
-  removeQuestion(questionNum: String!, paperId: String!): Question!
-  updateOption(optionNum: String!, paperId: String!, questionNum: String!, updateOptionInput: UpdateOptionInput!): Option!
-  removeOption(optionNum: String!, paperId: String!, questionNum: String!): Option!
+  updatePaper(id: Float!, updatePaperInput: UpdatePaperInput!): Paper!
+  removePaper(id: Float!): Paper!
+  updateTestResult(userId: Float!, paperId: Float!, updateTestResultInput: UpdateTestResultInput!): TestResult!
+  removetestResult(userId: Float!, paperId: Float!): TestResult!
+  updateQuestion(questionNum: Float!, paperId: Float!, updateQuestionInput: UpdateQuestionInput!): Question!
+  removeQuestion(questionNum: Float!, paperId: Float!): Question!
+  updateOption(optionNum: Float!, questionNum: Float!, paperId: Float!, updateOptionInput: UpdateOptionInput!): Option!
+  removeOption(optionNum: Float!, questionNum: Float!, paperId: Float!): Option!
 }
 
 input NewRecipeInput {
@@ -112,15 +113,15 @@ input NewRecipeInput {
 }
 
 input CreateOptionInput {
-  optionNum: String!
-  paperId: String!
-  questionNum: String!
+  optionNum: Int!
+  paperId: Int!
+  questionNum: Int!
   score: Int!
   content: String!
 }
 
 input UpdateUserInput {
-  email: String!
+  email: String
 }
 
 input CreatePaperInput {
@@ -128,7 +129,7 @@ input CreatePaperInput {
 }
 
 input UpdatePaperInput {
-  name: String!
+  name: String
 }
 
 input UpdateTestResultInput {
@@ -137,15 +138,15 @@ input UpdateTestResultInput {
 }
 
 input UpdateQuestionInput {
-  questionNum: String
-  paperId: String
+  questionNum: Int
+  paperId: Int
   content: String
 }
 
 input UpdateOptionInput {
-  optionNum: String
-  paperId: String
-  questionNum: String
+  optionNum: Int
+  paperId: Int
+  questionNum: Int
   score: Int
   content: String
 }

@@ -16,11 +16,11 @@ export class OptionsResolver {
 
     @Query(returns => Option, { name: 'option' })
     findOneById(
-        @Args('optionNum') optionNum: string,
-        @Args('paperId') paperId: string,
-        @Args('questionNum') questionNum: string,
+        @Args('optionNum') optionNum: number,
+        @Args('questionNum') questionNum: number,
+        @Args('paperId') paperId: number,
     ) {
-        return this.optionService.findOneBy(optionNum, paperId, questionNum);
+        return this.optionService.findOneBy(optionNum, questionNum, paperId);
     }
 
     @Query(returns => [Option], { name: 'options' })
@@ -30,21 +30,21 @@ export class OptionsResolver {
 
     @Mutation(returns => Option)
     updateOption(
-        @Args('optionNum') optionNum: string,
-        @Args('paperId') paperId: string,
-        @Args('questionNum') questionNum: string,
+        @Args('optionNum') optionNum: number,
+        @Args('questionNum') questionNum: number,
+        @Args('paperId') paperId: number,
         @Args('updateOptionInput') updateOptionInput: UpdateOptionInput
     ) {
-        return this.optionService.update(optionNum, paperId, questionNum, updateOptionInput);
+        return this.optionService.update(optionNum, questionNum, paperId, updateOptionInput);
     }
 
     @Mutation(returns => Option)
     removeOption(
-        @Args('optionNum') optionNum: string,
-        @Args('paperId') paperId: string,
-        @Args('questionNum') questionNum: string
+        @Args('optionNum') optionNum: number,
+        @Args('questionNum') questionNum: number,
+        @Args('paperId') paperId: number,
     ) {
-        return this.optionService.remove(optionNum, paperId, questionNum);
+        return this.optionService.remove(optionNum, questionNum, paperId);
     }
 
 }

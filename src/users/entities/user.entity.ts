@@ -6,9 +6,9 @@ import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from
 @Entity()
 @ObjectType({ description: 'user ' })
 export class User {
-  @PrimaryColumn({ name: 'id' })  // FIXME: PrimaryGeneratedColumn 
+  @PrimaryGeneratedColumn()  // FIXME: PrimaryGeneratedColumn 
   @Field((type) => ID)
-  id: string;
+  id: number;
 
   @Column()
   @Field()

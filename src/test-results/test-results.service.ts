@@ -14,7 +14,7 @@ export class TestResultsService {
         return await this.testResultRepository.find();
     }
 
-    async findOneById(userId: string, paperId: string): Promise<TestResult> {
+    async findOneById(userId: number, paperId: number): Promise<TestResult> {
         const testResult = await this.testResultRepository.findOneBy({
             userId: userId,
             paperId: paperId
@@ -27,7 +27,7 @@ export class TestResultsService {
         return testResult;
     }
 
-    async update(userId: string, paperId: string, updateTestResultInput: UpdateTestResultInput): Promise<TestResult> {
+    async update(userId: number, paperId: number, updateTestResultInput: UpdateTestResultInput): Promise<TestResult> {
         // const user = await this.userRepository.preload({
         //     id: id,
         //     ...updateUserInput,
@@ -46,7 +46,7 @@ export class TestResultsService {
         return await this.testResultRepository.save(testResult);
     }
 
-    async remove(userId: string, paperId: string): Promise<TestResult> {
+    async remove(userId: number, paperId: number): Promise<TestResult> {
         const testResult = await this.testResultRepository.findOneBy({
             userId: userId,
             paperId: paperId

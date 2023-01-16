@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { Option } from 'src/options/entities/option.entity';
 import { Question } from 'src/questions/entities/question.entity';
 import { TestChoice } from 'src/test-choices/entities/test-choice.entity';
@@ -8,9 +8,9 @@ import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from
 @Entity()
 @ObjectType({ description: 'paper ' })
 export class Paper {
-    @PrimaryColumn({ name: 'id' })  // FIXME: PrimaryGeneratedColumn
+    @PrimaryGeneratedColumn()  // FIXME: PrimaryGeneratedColumn
     @Field((type) => ID)
-    id: string;
+    id: number;
 
     @Column()
     @Field(() => String)

@@ -16,8 +16,8 @@ export class QuestionsResolver {
 
     @Query(returns => Question, { name: 'question' })
     findOneById(
-        @Args('questionNum') questionNum: string,
-        @Args('paperId') paperId: string,
+        @Args('questionNum') questionNum: number,
+        @Args('paperId') paperId: number,
     ) {
         return this.questionService.findOneBy(questionNum, paperId);
     }
@@ -29,8 +29,8 @@ export class QuestionsResolver {
 
     @Mutation(returns => Question)
     updateQuestion(
-        @Args('questionNum') questionNum: string,
-        @Args('paperId') paperId: string,
+        @Args('questionNum') questionNum: number,
+        @Args('paperId') paperId: number,
         @Args('updateQuestionInput') updateQuestionInput: UpdateQuestionInput
     ) {
         return this.questionService.update(questionNum, paperId, updateQuestionInput);
@@ -38,8 +38,8 @@ export class QuestionsResolver {
 
     @Mutation(returns => Question)
     removeQuestion(
-        @Args('questionNum') questionNum: string,
-        @Args('paperId') paperId: string,
+        @Args('questionNum') questionNum: number,
+        @Args('paperId') paperId: number,
     ) {
         return this.questionService.remove(questionNum, paperId);
     }

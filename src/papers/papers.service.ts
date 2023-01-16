@@ -22,7 +22,7 @@ export class PapersService {
         return await this.paperRepository.find();
     }
 
-    async findOneBy(id: string): Promise<Paper> {
+    async findOneBy(id: number): Promise<Paper> {
         const paper = await this.paperRepository.findOneBy({ id: id });
 
         if (!paper) {
@@ -32,7 +32,7 @@ export class PapersService {
         return paper;
     }
 
-    async update(id: string, updatePaperInput: UpdatePaperInput): Promise<Paper> {
+    async update(id: number, updatePaperInput: UpdatePaperInput): Promise<Paper> {
         const paper = await this.paperRepository.findOneBy({ id: id });
 
         if (!paper) {
@@ -43,7 +43,7 @@ export class PapersService {
         return await this.paperRepository.save(paper);
     }
 
-    async remove(id: string) {
+    async remove(id: number) {
         const paper = await this.paperRepository.findOneBy({ id: id });
 
         if (!paper) {

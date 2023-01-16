@@ -8,61 +8,33 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColu
 @Entity()
 @ObjectType({ description: 'test_choice ' })
 export class TestChoice {
-    @PrimaryColumn({ name: "user_id" })
+    @PrimaryColumn()
     @Field((type) => ID)
-    userId: string
+    testResultUserId: number
 
-    @PrimaryColumn({ name: "paper_id" })
+    @PrimaryColumn()
     @Field((type) => ID)
-    paperId: string;
+    testResultPaperId: number;
 
-    @PrimaryColumn({ name: "question_id" })
+    @PrimaryColumn()
     @Field((type) => ID)
-    questionId: string;
+    optionNum: number;
 
-    @PrimaryColumn({ name: "option_id" })
+    @PrimaryColumn()
     @Field((type) => ID)
-    optionId: string;
+    optionPaperId: number;
 
-    // @ManyToOne(() => User, (user: User) => user.testChoices)
-    // @JoinColumn({ name: "user_id" })
-    // @Field((type) => User)
-    // user: User
-
-    // @ManyToOne(() => Paper, (paper: Paper) => paper.testChoices)
-    // @JoinColumn({ name: "paper_id" })
-    // @Field((type) => Paper)
-    // paper: Paper
+    @PrimaryColumn()
+    @Field((type) => ID)
+    optionQuestionNum: number;
 
     @ManyToOne(() => TestResult, (testResult: TestResult) => testResult.testChoices)
-    @JoinColumn([
-        {
-            name: 'user_id',
-            referencedColumnName: 'userId'
-        },
-        {
-            name: 'paper_id',
-            referencedColumnName: 'paperId'
-        }
-    ])
+    @JoinColumn()
     @Field((type) => TestResult)
     testResult: TestResult
 
     @OneToOne(() => Option, (option: Option) => option.testChoice)
-    @JoinColumn([
-        {
-            name: 'option_id',
-            referencedColumnName: 'id'
-        },
-        {
-            name: 'paper_id',
-            referencedColumnName: 'paperId'
-        },
-        {
-            name: 'question_id',
-            referencedColumnName: 'questionId'
-        },
-    ])
+    @JoinColumn()
     @Field((type) => User)
     option: Option
 

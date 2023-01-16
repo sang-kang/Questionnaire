@@ -18,7 +18,7 @@ export class UsersService {
         return await this.userRepository.find();
     }
 
-    async findOneById(id: string): Promise<User> {
+    async findOneById(id: number): Promise<User> {
         const user = await this.userRepository.findOneBy({ id: id });
 
         if (!user) {
@@ -28,7 +28,7 @@ export class UsersService {
         return user;
     }
 
-    async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
+    async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
         // const user = await this.userRepository.preload({
         //     id: id,
         //     ...updateUserInput,
@@ -44,7 +44,7 @@ export class UsersService {
         return await this.userRepository.save(user);
     }
 
-    async remove(id: string): Promise<User> {
+    async remove(id: number): Promise<User> {
         const user = await this.userRepository.findOneBy({ id: id });
 
         if (!user) {

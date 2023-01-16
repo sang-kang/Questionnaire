@@ -3,8 +3,4 @@ import { IsString } from 'class-validator';
 import { CreatePaperInput } from './create-paper.input';
 
 @InputType()
-export class UpdatePaperInput extends PartialType(CreatePaperInput) {
-    @Field(() => String)
-    @IsString()
-    name: string;
-}
+export class UpdatePaperInput extends PartialType(CreatePaperInput) { }

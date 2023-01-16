@@ -32,46 +32,46 @@ export class OptionsService {
         return await this.optionRepository.find();
     }
 
-    async findOneBy(id: string, paperId: string, questionId: string): Promise<Option> {
+    async findOneBy(optionNum: number, questionNum: number, paperId: number): Promise<Option> {
         const option = await this.optionRepository.findOneBy({
-            id:id,
-            questionId: questionId,
-            paperId: paperId
+            num: optionNum,
+            questionNum: questionNum,
+            questionPaperId: paperId
         });
 
         if (!option) {
-            throw new NotFoundException(`option num ${id} in question ${questionId} in paper ${paperId} not found`);
+            throw new NotFoundException(`option num ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
         }
 
         return option;
     }
 
-    async update(id: string, paperId: string, questionId: string, updateOptionInput: UpdateOptionInput): Promise<Option> {
+    async update(optionNum: number, questionNum: number, paperId: number, updateOptionInput: UpdateOptionInput): Promise<Option> {
         const option = await this.optionRepository.findOneBy({
-            id:id,
-            questionId: questionId,
-            paperId: paperId
+            num: optionNum,
+            questionNum: questionNum,
+            questionPaperId: paperId
         });
 
         if (!option) {
-            throw new NotFoundException(`option num ${id} in question ${questionId} in paper ${paperId} not found`);
+            throw new NotFoundException(`option num ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
         }
 
         Object.assign(option, updateOptionInput);
         return await this.optionRepository.save(option);
     }
 
-    async remove(id: string, paperId: string, questionId: string): Promise<Option> {
+    async remove(optionNum: number, questionNum: number, paperId: number): Promise<Option> {
         const option = await this.optionRepository.findOneBy({
-            id:id,
-            questionId: questionId,
-            paperId: paperId
+            num: optionNum,
+            questionNum: questionNum,
+            questionPaperId: paperId
         });
 
         if (!option) {
-            throw new NotFoundException(`option num ${id} in question ${questionId} in paper ${paperId} not found`);
+            throw new NotFoundException(`option num ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
         }
-        
+
         return await this.optionRepository.remove(option);
     }
 }

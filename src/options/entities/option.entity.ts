@@ -7,17 +7,17 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryColu
 @Entity()
 @ObjectType({ description: 'option ' })
 export class Option {
-    @PrimaryColumn({ name: "id" })
+    @PrimaryColumn()
     @Field((type) => ID)
-    id: string;
+    num: number;
 
-    @PrimaryColumn({ name: "paper_id" })
+    @PrimaryColumn()
     @Field((type) => ID)
-    paperId: string;
+    questionNum: number;
 
-    @PrimaryColumn({ name: "question_id" })
+    @PrimaryColumn()
     @Field((type) => ID)
-    questionId: string;
+    questionPaperId: number;
 
     // // 이거 꼭 넣어야 하나 의문.. 그런데 이름 예쁘게 하려면 넣어야 되고 
     // @ManyToOne(() => Paper, (paper: Paper) => paper.options)
@@ -26,18 +26,7 @@ export class Option {
     // paper: Paper
 
     @ManyToOne(() => Question, (question: Question) => question.options)
-    @JoinColumn([
-        {
-            name: 'question_id',
-            referencedColumnName: 'id',
-            // foreignKeyConstraintName: 'FK_option_question_question_id'
-        },
-        {
-            name: 'paper_id',
-            referencedColumnName: 'paperId',
-            // foreignKeyConstraintName: 'FK_option_question_paper_id'
-        },
-    ])
+    @JoinColumn()
     @Field((type) => Question)
     question: Question
     // Question테이블은 Composite primary key(id, paper_id))를 가지고 있기 때문에, question에 대헌 어떤 references든 반드시 이 두 칼럼을 포함해야 한다. 

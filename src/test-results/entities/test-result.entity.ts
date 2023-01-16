@@ -1,5 +1,4 @@
 import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
-import { type } from 'os';
 import { Paper } from 'src/papers/entities/paper.entity';
 import { TestChoice } from 'src/test-choices/entities/test-choice.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -8,21 +7,19 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, Primar
 @Entity()
 @ObjectType({ description: 'test_result ' })
 export class TestResult {
-    @PrimaryColumn({ name: 'user_id' })
+    @PrimaryColumn()
     @Field((type) => ID)
-    userId: string;
+    userId: number;
 
-    @PrimaryColumn({ name: 'paper_id' })
+    @PrimaryColumn()
     @Field((type) => ID)
-    paperId: string;
+    paperId: number;
 
     @ManyToOne(() => User, (user: User) => user.testResults)
-    @JoinColumn({ name: "user_id" })
     @Field((type) => User)
     user: User
 
     @ManyToOne(() => Paper, (paper: Paper) => paper.testResults)
-    @JoinColumn({ name: "paper_id" })
     @Field((type) => Paper)
     paper: Paper
 

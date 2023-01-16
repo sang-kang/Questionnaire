@@ -16,7 +16,7 @@ export class PapersResolver {
     }
 
     @Query(returns => Paper, { name: 'paper' })
-    findOneById(@Args('id') id: string) {
+    findOneById(@Args('id') id: number) {
         return this.papersService.findOneBy(id);
     }
 
@@ -27,14 +27,14 @@ export class PapersResolver {
 
     @Mutation(returns => Paper)
     updatePaper(
-        @Args('id') id: string,
+        @Args('id') id: number,
         @Args('updatePaperInput') updatePaperInput: UpdatePaperInput,
     ) {
         return this.papersService.update(id, updatePaperInput);
     }
 
     @Mutation(returns => Paper)
-    removePaper(@Args('id') id: string) {
+    removePaper(@Args('id') id: number) {
         return this.papersService.remove(id);
     }
 }

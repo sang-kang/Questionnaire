@@ -15,7 +15,7 @@ export class UsersResolver {
   }
 
   @Query(returns => User, { name: 'user' })
-  findOneById(@Args('id') id: string) {
+  findOneById(@Args('id') id: number) {
     return this.usersService.findOneById(id);
   }
 
@@ -26,14 +26,14 @@ export class UsersResolver {
 
   @Mutation(returns => User)
   updateUser(
-    @Args('id') id: string,
+    @Args('id') id: number,
     @Args('updateUserInput') updateUserInput: UpdateUserInput
   ) {
     return this.usersService.update(id, updateUserInput);
   }
 
   @Mutation(returns => User)
-  removeUser(@Args('id') id: string) {
+  removeUser(@Args('id') id: number) {
     return this.usersService.remove(id);
   }
 }

@@ -6,20 +6,16 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 
 @Entity()
 @ObjectType({ description: 'question ' })
 export class Question {
-    @PrimaryColumn({ name: 'id' })
+    @PrimaryColumn()
     @Field((type) => ID)
-    id: string;
+    num: number;
 
-    @PrimaryColumn({ name: 'paper_id' })
+    @PrimaryColumn()
     @Field((type) => ID)
-    paperId: string;
+    paperId: number;
 
     @ManyToOne(() => Paper, (paper: Paper) => paper.questions)
-    @JoinColumn({ 
-        name: 'paper_id', 
-        referencedColumnName: 'id',
-        foreignKeyConstraintName: 'FK_paper_question' 
-    })
+    @JoinColumn()
     @Field((type) => Paper)
     paper: Paper
 
