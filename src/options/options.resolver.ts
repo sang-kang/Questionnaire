@@ -10,7 +10,7 @@ export class OptionsResolver {
     constructor(private readonly optionService: OptionsService) { }
 
     @Mutation(returns => Option)
-    createUser(@Args('createOptionInput') createOptionInput: CreateOptionInput): Promise<Option> {
+    createOption(@Args('createOptionInput') createOptionInput: CreateOptionInput): Promise<Option> {
         return this.optionService.create(createOptionInput);
     }
 

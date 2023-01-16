@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QuestionsService } from 'src/questions/questions.service';
 import { Repository } from 'typeorm';
@@ -15,9 +15,24 @@ export class OptionsService {
         @Inject(QuestionsService) private readonly questionService: QuestionsService
     ) { }
 
-    async create(createOptionInput: CreateOptionInput): Promise<Option> {
-        const option = await this.optionRepository.create(createOptionInput);
-        const question = await this.questionService.findOneBy(createOptionInput.questionNum, createOptionInput.paperId);
+    async create({ optionNum, paperId, questionNum, score, content }: CreateOptionInput): Promise<Option> {
+        // 이 값이 있는지 체크해야 한다 
+        const optionExist = await this.optionRepository.findOneBy({
+            num: optionNum,
+            questionNum: questionNum,
+            questionPaperId: paperId
+        });
+
+        if (optionExist) {
+            throw new BadRequestException(`option num ${optionNum} in question num ${questionNum} in paper id ${paperId} already exist`);
+        }
+
+        const option = await this.optionRepository.create({
+            num: optionNum,
+            score: score,
+            content: content
+        });
+        const question = await this.questionService.findOneBy(questionNum, paperId);
 
         if (!question) {
             throw new NotFoundException('Cannot find the question. An option must be under question.')

@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PapersService } from 'src/papers/papers.service';
 import { Repository } from 'typeorm';
@@ -14,10 +14,23 @@ export class QuestionsService {
         @Inject(PapersService) private readonly paperService: PapersService
     ) { }
 
-    async create(createQuestionInput: CreateQuestionInput): Promise<Question> {
-        const question = await this.questionRepository.create(createQuestionInput);
-        const paper = await this.paperService.findOneBy(createQuestionInput.paperId);
+    async create({ questionNum, paperId, content }: CreateQuestionInput): Promise<Question> {
+        // 무결성? 일관성? 체크
+        const questionExist = await this.questionRepository.findOneBy({
+            num: questionNum,
+            paperId: paperId
+        })
 
+        if (questionExist) {
+            throw new BadRequestException(`question num ${questionNum} in paper id ${paperId} already exist`);
+        }
+
+        const question = await this.questionRepository.create({
+            num: questionNum,
+            content: content
+        });
+        
+        const paper = await this.paperService.findOneBy(paperId);
         if (!paper) {
             throw new NotFoundException('Cannot find the paper. A question must be under paper.')
         }

@@ -21,7 +21,7 @@ type TestChoice {
   testResultUserId: ID!
   testResultPaperId: ID!
   optionNum: ID!
-  optionPaperId: ID!
+  optionQuestionPaperId: ID!
   optionQuestionNum: ID!
   testResult: TestResult!
   option: User!
@@ -83,27 +83,35 @@ type Query {
   papers: [Paper!]!
   testResult(userId: Float!, paperId: Float!): TestResult!
   testResults: [TestResult!]!
-  question(questionNum: Float!, paperId: Float!): Question!
-  questions: [Question!]!
   option(optionNum: Float!, questionNum: Float!, paperId: Float!): Option!
   options: [Option!]!
+  question(questionNum: Float!, paperId: Float!): Question!
+  questions: [Question!]!
 }
 
 type Mutation {
   addRecipe(newRecipeData: NewRecipeInput!): Recipe!
   removeRecipe(id: String!): Boolean!
-  createUser(createOptionInput: CreateOptionInput!): Option!
+  createUser(createUserInput: CreateUserInput!): User!
   updateUser(id: Float!, updateUserInput: UpdateUserInput!): User!
   removeUser(id: Float!): User!
   createPaper(createPaperInput: CreatePaperInput!): Paper!
   updatePaper(id: Float!, updatePaperInput: UpdatePaperInput!): Paper!
   removePaper(id: Float!): Paper!
+
+  """user start test"""
+  createTestResult(createTestResultInput: CreateTestResultInput!): TestResult!
   updateTestResult(userId: Float!, paperId: Float!, updateTestResultInput: UpdateTestResultInput!): TestResult!
   removetestResult(userId: Float!, paperId: Float!): TestResult!
-  updateQuestion(questionNum: Float!, paperId: Float!, updateQuestionInput: UpdateQuestionInput!): Question!
-  removeQuestion(questionNum: Float!, paperId: Float!): Question!
+
+  """user serlect option"""
+  createTestChoice(createTestChoiceInput: CreateTestChoiceInput!): TestChoice!
+  createOption(createOptionInput: CreateOptionInput!): Option!
   updateOption(optionNum: Float!, questionNum: Float!, paperId: Float!, updateOptionInput: UpdateOptionInput!): Option!
   removeOption(optionNum: Float!, questionNum: Float!, paperId: Float!): Option!
+  createQuestion(createQuestionInput: CreateQuestionInput!): Question!
+  updateQuestion(questionNum: Float!, paperId: Float!, updateQuestionInput: UpdateQuestionInput!): Question!
+  removeQuestion(questionNum: Float!, paperId: Float!): Question!
 }
 
 input NewRecipeInput {
@@ -112,12 +120,8 @@ input NewRecipeInput {
   ingredients: [String!]!
 }
 
-input CreateOptionInput {
-  optionNum: Int!
-  paperId: Int!
-  questionNum: Int!
-  score: Int!
-  content: String!
+input CreateUserInput {
+  email: String!
 }
 
 input UpdateUserInput {
@@ -132,15 +136,31 @@ input UpdatePaperInput {
   name: String
 }
 
-input UpdateTestResultInput {
-  totalScore: Int
-  isSubmitted: Boolean
+input CreateTestResultInput {
+  userId: ID!
+  paperId: ID!
 }
 
-input UpdateQuestionInput {
-  questionNum: Int
-  paperId: Int
-  content: String
+input UpdateTestResultInput {
+  userId: ID
+  paperId: ID
+  totalScore: Int!
+  isSubmitted: Boolean!
+}
+
+input CreateTestChoiceInput {
+  userId: Int!
+  paperId: Int!
+  questionNum: Int!
+  optionNum: Int!
+}
+
+input CreateOptionInput {
+  optionNum: Int!
+  paperId: Int!
+  questionNum: Int!
+  score: Int!
+  content: String!
 }
 
 input UpdateOptionInput {
@@ -148,6 +168,18 @@ input UpdateOptionInput {
   paperId: Int
   questionNum: Int
   score: Int
+  content: String
+}
+
+input CreateQuestionInput {
+  questionNum: Int!
+  paperId: Int!
+  content: String!
+}
+
+input UpdateQuestionInput {
+  questionNum: Int
+  paperId: Int
   content: String
 }
 

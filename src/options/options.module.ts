@@ -10,6 +10,7 @@ import { QuestionsModule } from 'src/questions/questions.module';
     TypeOrmModule.forFeature([Option]),
     QuestionsModule
   ],
-  providers: [OptionsService, OptionsResolver]
+  providers: [OptionsService, OptionsResolver],
+  exports: [OptionsService]
 })
 export class OptionsModule { }

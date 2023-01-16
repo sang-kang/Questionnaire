@@ -1,4 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CreateTestResultInput } from './dto/create-test-result.input';
 import { UpdateTestResultInput } from './dto/update-test-result.input';
 import { TestResult } from './entities/test-result.entity';
 import { TestResultsService } from './test-results.service';
@@ -8,12 +9,17 @@ export class TestResultsResolver {
 
     constructor(private readonly testResultService: TestResultsService) { }
 
+    @Mutation(returns => TestResult, { description: 'user start test' })
+    createTestResult(@Args('createTestResultInput') createTestResultInput: CreateTestResultInput) {
+        return this.testResultService.create(createTestResultInput);
+    }
+
     @Query(returns => TestResult, { name: 'testResult' })
     findOneById(
         @Args('userId') userId: number,
         @Args('paperId') paperId: number,
     ) {
-        return this.testResultService.findOneById(userId, paperId);
+        return this.testResultService.findOneBy(userId, paperId);
     }
 
     @Query(returns => [TestResult], { name: 'testResults' })

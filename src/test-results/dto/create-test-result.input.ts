@@ -1,10 +1,10 @@
-import { InputType, Field, Int } from '@nestjs/graphql';
+import { InputType, Field, Int, ID } from '@nestjs/graphql';
 
 @InputType()
 export class CreateTestResultInput {
-    @Field(type => Int)
-    totalScore: number;
+    @Field(type => ID)
+    userId: number;
 
-    @Field()
-    isSubmitted: boolean
+    @Field(type => ID)
+    paperId: number;
 }

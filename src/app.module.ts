@@ -39,7 +39,7 @@ import { OptionsModule } from './options/options.module';
       // entities: [Paper],
       synchronize: true,
       // dropSchema: true,
-      logging:true
+      logging: true
     }),
     RecipesModule,
     UsersModule,

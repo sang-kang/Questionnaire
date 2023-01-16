@@ -20,9 +20,12 @@ export class TestChoice {
     @Field((type) => ID)
     optionNum: number;
 
+    // @PrimaryColumn()
+    // @Field((type) => ID)
+    // optionPaperId: number;
     @PrimaryColumn()
     @Field((type) => ID)
-    optionPaperId: number;
+    optionQuestionPaperId: number
 
     @PrimaryColumn()
     @Field((type) => ID)
