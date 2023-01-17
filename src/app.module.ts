@@ -13,9 +13,13 @@ import { OptionsModule } from './options/options.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerModule } from './logger/logger.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
@@ -31,14 +35,13 @@ import { LoggerModule } from './logger/logger.module';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '0000',
-      database: 'postgres',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       autoLoadEntities: true,
       synchronize: true,
-      logging: true
     }),
     UsersModule,
     PapersModule,
@@ -50,7 +53,7 @@ import { LoggerModule } from './logger/logger.module';
   ],
   controllers: [AppController],
   providers: [
-    AppService, 
+    AppService,
     Logger
   ]
 })

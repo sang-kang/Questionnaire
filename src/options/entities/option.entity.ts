@@ -19,7 +19,7 @@ export class Option {
     questionPaperId: number;
 
     @ManyToOne(() => Question, (question: Question) => question.options, { eager: true })
-    @Field((type) => Question)
+    @Field((type) => Question, { nullable: true })
     question: Question
 
     @OneToOne(() => TestChoice, (testChoice) => testChoice.option)

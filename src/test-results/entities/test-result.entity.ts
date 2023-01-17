@@ -16,11 +16,11 @@ export class TestResult {
     paperId: number;
 
     @ManyToOne(() => User, (user: User) => user.testResults, { eager: true })
-    @Field((type) => User)
+    @Field((type) => User, { nullable: true })
     user: User
 
     @ManyToOne(() => Paper, (paper: Paper) => paper.testResults, { eager: true })
-    @Field((type) => Paper)
+    @Field((type) => Paper, { nullable: true })
     paper: Paper
 
     @OneToMany(() => TestChoice, (testChoice: TestChoice) => testChoice.testResult)

@@ -11,7 +11,7 @@ type TestChoice {
   optionNum: ID!
   optionQuestionPaperId: ID!
   optionQuestionNum: ID!
-  testResult: TestResult!
+  testResult: TestResult
   option: User
   score: Int!
 }
@@ -21,7 +21,7 @@ type Option {
   num: ID!
   questionNum: ID!
   questionPaperId: ID!
-  question: Question!
+  question: Question
   testChoice: TestChoice
   score: Int!
   content: String!
@@ -31,7 +31,7 @@ type Option {
 type Question {
   num: ID!
   paperId: ID!
-  paper: Paper!
+  paper: Paper
   options: [Option]
   content: String!
 }
@@ -48,8 +48,8 @@ type Paper {
 type TestResult {
   userId: ID!
   paperId: ID!
-  user: User!
-  paper: Paper!
+  user: User
+  paper: Paper
   testChoices: [TestChoice]
   totalScore: Int!
   isSubmitted: Boolean!

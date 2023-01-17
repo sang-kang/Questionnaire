@@ -28,7 +28,7 @@ export class TestChoice {
     optionQuestionNum: number;
 
     @ManyToOne(() => TestResult, (testResult: TestResult) => testResult.testChoices, { eager: true })
-    @Field((type) => TestResult)
+    @Field((type) => TestResult, { nullable: true })
     testResult: TestResult
 
     @OneToOne(() => Option, (option: Option) => option.testChoice)
