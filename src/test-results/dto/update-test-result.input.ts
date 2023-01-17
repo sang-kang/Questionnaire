@@ -5,8 +5,8 @@ import { CreateTestResultInput } from './create-test-result.input';
 @InputType()
 export class UpdateTestResultInput {
     @Field(type => Int)
-    totalScore: number;
+    totalScore?: number;
 
     @Field()
-    isSubmitted: boolean;
+    isSubmitted?: boolean;
 }

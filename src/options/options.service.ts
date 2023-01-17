@@ -1,5 +1,6 @@
 import { Inject, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MyLogger } from 'src/logger/my-loger.service';
 import { QuestionsService } from 'src/questions/questions.service';
 import { Repository } from 'typeorm';
 import { CreateOptionInput } from './dto/create-option.input';
@@ -11,12 +12,14 @@ import { Option } from './entities/option.entity';
 export class OptionsService {
 
     constructor(
+        private readonly myLogger: MyLogger,
         @InjectRepository(Option) private readonly optionRepository: Repository<Option>,
         @Inject(QuestionsService) private readonly questionService: QuestionsService
-    ) { }
+    ) {
+        this.myLogger.setContext('OptionsService');
+    }
 
     async create({ optionNum, paperId, questionNum, score, content }: CreateOptionInput): Promise<Option> {
-        // 이 값이 있는지 체크해야 한다 
         const optionExist = await this.optionRepository.findOneBy({
             num: optionNum,
             questionNum: questionNum,
@@ -24,6 +27,7 @@ export class OptionsService {
         });
 
         if (optionExist) {
+            this.myLogger.error(`option num ${optionNum} in question num ${questionNum} in paper id ${paperId} already exist`);
             throw new BadRequestException(`option num ${optionNum} in question num ${questionNum} in paper id ${paperId} already exist`);
         }
 
@@ -35,11 +39,11 @@ export class OptionsService {
         const question = await this.questionService.findOneBy(questionNum, paperId);
 
         if (!question) {
-            throw new NotFoundException('Cannot find the question. An option must be under question.')
+            this.myLogger.error(`Cannot find the question ${questionNum}.`);
+            throw new NotFoundException(`Cannot find the question ${questionNum}.`);
         }
 
         option.question = question;
-        // option.paper = question.paper;  //FIXME: 이 부분 필요한가?
         return await this.optionRepository.save(option);
     }
 
@@ -58,6 +62,7 @@ export class OptionsService {
         });
 
         if (!option) {
+            this.myLogger.error(`option num ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
             throw new NotFoundException(`option num ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
         }
 
@@ -76,16 +81,13 @@ export class OptionsService {
             questionNum: questionNum,
             questionPaperId: paperId
         });
-        console.log('original option: ', option);
 
         if (!option) {
+            this.myLogger.error(`option num ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
             throw new NotFoundException(`option num ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
         }
 
         Object.assign(option, updateOptionInput);
-        console.log('updated option: ', option);
-
-
         return await this.optionRepository.save(option);
     }
 
@@ -97,6 +99,7 @@ export class OptionsService {
         });
 
         if (!option) {
+            this.myLogger.error(`option num ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
             throw new NotFoundException(`option num ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
         }
 

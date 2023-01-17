@@ -22,7 +22,6 @@ export class Option {
     @Field((type) => Question)
     question: Question
 
-    // option은 있는데 testChoice는 없을 수 있음. 
     @OneToOne(() => TestChoice, (testChoice) => testChoice.option)
     @Field((type) => TestChoice, { nullable: true })
     testChoice: TestChoice

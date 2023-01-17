@@ -44,7 +44,6 @@ export class TestResultsResolver {
         return this.testResultService.remove(userId, paperId);
     }
 
-    // update와 분리해야 하나?
     @Mutation(returns => TestResult)
     submitTestResult(
         @Args('userId') userId: number,

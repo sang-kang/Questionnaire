@@ -8,16 +8,20 @@ import { Repository } from 'typeorm';
 import { CreateTestChoiceInput } from './dto/create-test-choice.input';
 import { UpdateTestChoiceInput } from './dto/update-test-choice.input';
 import { TestChoice } from './entities/test-choice.entity';
+import { MyLogger } from 'src/logger/my-loger.service';
 
 
 @Injectable()
 export class TestChoicesService {
 
     constructor(
+        private readonly myLogger: MyLogger,
         @InjectRepository(TestChoice) private readonly testChoiceRepository: Repository<TestChoice>,
         @Inject(TestResultsService) private readonly testResultService: TestResultsService,
         @Inject(OptionsService) private readonly optionService: OptionsService
-    ) { }
+    ) {
+        this.myLogger.setContext('TestChoicesService');
+    }
 
     async create({ userId, paperId, questionNum, optionNum }: CreateTestChoiceInput): Promise<TestChoice> {
         const testChoiceExist = await this.testChoiceRepository.findOneBy({
@@ -29,12 +33,14 @@ export class TestChoicesService {
         })
 
         if (testChoiceExist) {
+            this.myLogger.error(`user ${userId} alread create option ${optionNum} in question ${questionNum} in paper ${paperId}`);
             throw new BadRequestException(`user ${userId} alread create option ${optionNum} in question ${questionNum} in paper ${paperId}`);
         }
 
         const option = await this.optionService.findOneBy(optionNum, questionNum, paperId);
         if (!option) {
-            throw new NotFoundException();
+            this.myLogger.error(`option ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
+            throw new NotFoundException(`option ${optionNum} in question ${questionNum} in paper ${paperId} not found`);
         }
 
         const testChoice = await this.testChoiceRepository.create({
@@ -43,7 +49,8 @@ export class TestChoicesService {
 
         const testResult = await this.testResultService.findOneBy(userId, paperId);
         if (!testResult) {
-            throw new NotFoundException();
+            this.myLogger.error(`test result of user ${userId} of paper ${paperId}`);
+            throw new NotFoundException(`test result of user ${userId} of paper ${paperId}`);
         }
 
         const updateTestResultInput = new UpdateTestResultInput();
@@ -94,31 +101,31 @@ export class TestChoicesService {
 
         const testChoice = testChoices.find((testChoice) => testChoice.optionNum === originalOptionNum);
         if (!testChoice) {
-            throw new NotFoundException(`Test choice not found`)
+            this.myLogger.error(`Test choice not found`);
+            throw new NotFoundException(`Test choice not found`);
         }
 
-        // 바꾸려는 optionNum을, userId, paperId, questionNum에서 이미 선택한적이 있는지도 체크해야 될거같다. 
         const isSameOptionNum = testChoices.find((testChoice) => testChoice.optionNum === updateTestChoiceInput.optionNum);
         if (isSameOptionNum) {
+            this.myLogger.error(`already choose option ${updateTestChoiceInput.optionNum} in this test question ${questionNum}. choose others.`)
             throw new BadRequestException(`already choose option ${updateTestChoiceInput.optionNum} in this test question ${questionNum}. choose others.`);
         }
 
-        // user가 바꾼 optionNum으로 option을 가지고 와서 
         const option = await this.optionService.findOneBy(updateTestChoiceInput.optionNum, questionNum, paperId);
         if (!option) {
-            throw new NotFoundException('Option not found');
+            this.myLogger.error(`option ${updateTestChoiceInput.optionNum} in question ${questionNum} in paper ${paperId} not found`);
+            throw new NotFoundException(`option ${updateTestChoiceInput.optionNum} in question ${questionNum} in paper ${paperId} not found`);
         }
 
         const originalScore = testChoice.score;
         const newScore = option.score;
-        // 현재 testChoice의 optionNum을 바꿔주고, score도 그에 맞게 바꿔주고  
         testChoice.optionNum = updateTestChoiceInput.optionNum;
         testChoice.score = newScore
 
-        // 이 testChoice가 속한 testResult의 totalScore도 바꿔주고 
         const testResult = await this.testResultService.findOneBy(userId, paperId);
         if (!testResult) {
-            throw new NotFoundException();
+            this.myLogger.error(`test result of user ${userId} of paper ${paperId}`);
+            throw new NotFoundException(`test result of user ${userId} of paper ${paperId}`);
         }
 
         const updateTestResultInput = new UpdateTestResultInput();
@@ -143,7 +150,8 @@ export class TestChoicesService {
         });
 
         if (!testChoice) {
-            throw new NotFoundException(`Option ${optionNum} not found`)
+            this.myLogger.error(`Option ${optionNum} not found`);
+            throw new NotFoundException(`Option ${optionNum} not found`);
         }
 
         return await this.testChoiceRepository.remove(testChoice);

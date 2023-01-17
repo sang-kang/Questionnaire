@@ -5,9 +5,9 @@ import { CreateOptionInput } from './create-option.input';
 @InputType()
 export class UpdateOptionInput {
     @Field(type => Int)
-    score: number
+    score?: number
 
     @Field(type => String)
     @IsString()
-    content: string;
+    content?: string;
 }

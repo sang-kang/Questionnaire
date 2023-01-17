@@ -1,5 +1,5 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsEmail } from 'class-validator';
+import { IsEmail, Max, Min } from 'class-validator';
 
 @InputType()
 export class CreateTestChoiceInput {
@@ -10,8 +10,12 @@ export class CreateTestChoiceInput {
   paperId: number;
 
   @Field(type => Int)
+  @Min(1)
+  @Max(100)
   questionNum: number;
 
   @Field(type => Int)
+  @Min(1)
+  @Max(10)
   optionNum: number;
 }

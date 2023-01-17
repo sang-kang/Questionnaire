@@ -5,23 +5,27 @@ import { Repository } from 'typeorm';
 import { CreateQuestionInput } from './dto/create-question.input';
 import { UpdateQuestionInput } from './dto/update-question.input';
 import { Question } from './entities/question.entity';
+import { MyLogger } from 'src/logger/my-loger.service';
 
 @Injectable()
 export class QuestionsService {
 
     constructor(
+        private readonly myLogger: MyLogger,
         @InjectRepository(Question) private readonly questionRepository: Repository<Question>,
         @Inject(PapersService) private readonly paperService: PapersService
-    ) { }
+    ) {
+        this.myLogger.setContext('QuestionsService');
+    }
 
     async create({ questionNum, paperId, content }: CreateQuestionInput): Promise<Question> {
-        // 무결성? 일관성? 체크
         const questionExist = await this.questionRepository.findOneBy({
             num: questionNum,
             paperId: paperId
         })
 
         if (questionExist) {
+            this.myLogger.error(`question num ${questionNum} in paper id ${paperId} already exist`);
             throw new BadRequestException(`question num ${questionNum} in paper id ${paperId} already exist`);
         }
 
@@ -32,7 +36,8 @@ export class QuestionsService {
 
         const paper = await this.paperService.findOneBy(paperId);
         if (!paper) {
-            throw new NotFoundException('Cannot find the paper. A question must be under paper.')
+            this.myLogger.error(`Cannot find the paper ${paperId}.`);
+            throw new NotFoundException(`Cannot find the paper ${paperId}.`);
         }
 
         question.paper = paper;
@@ -53,6 +58,7 @@ export class QuestionsService {
         });
 
         if (!question) {
+            this.myLogger.error(`question num ${questionNum} at paper ${paperId} not found`);
             throw new NotFoundException(`question num ${questionNum} at paper ${paperId} not found`);
         }
 
@@ -71,6 +77,7 @@ export class QuestionsService {
         });
 
         if (!question) {
+            this.myLogger.error(`question num ${questionNum} at paper ${paperId} not found`);
             throw new NotFoundException(`question num ${questionNum} at paper ${paperId} not found`);
         }
 
@@ -85,6 +92,7 @@ export class QuestionsService {
         });
 
         if (!question) {
+            this.myLogger.error(`question num ${questionNum} at paper ${paperId} not found`);
             throw new NotFoundException(`question num ${questionNum} at paper ${paperId} not found`);
         }
 

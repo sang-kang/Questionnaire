@@ -33,7 +33,7 @@ export class TestChoice {
 
     @OneToOne(() => Option, (option: Option) => option.testChoice)
     @JoinColumn()
-    @Field((type) => User, { nullable: true }) // 0 or 1 : 1이니까?
+    @Field((type) => User, { nullable: true })
     option: Option
 
     @Column()

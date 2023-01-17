@@ -13,7 +13,6 @@ export class User {
   @Field()
   email: string;
 
-  // user는 있는데 testResult는 없을 수 잇음. 
   @OneToMany(() => TestResult, (testResult) => testResult.user)
   @Field((type) => [TestResult], { nullable: 'itemsAndList' })
   testResults: TestResult[]

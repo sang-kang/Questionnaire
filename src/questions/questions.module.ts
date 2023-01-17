@@ -5,11 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Question } from './entities/question.entity';
 import { PapersService } from 'src/papers/papers.service';
 import { PapersModule } from 'src/papers/papers.module';
+import { LoggerModule } from 'src/logger/logger.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Question]),
-    PapersModule
+    PapersModule,
+    LoggerModule
   ],
   providers: [QuestionsService, QuestionsResolver],
   exports:[QuestionsService]

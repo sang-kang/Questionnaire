@@ -8,24 +8,28 @@ import { Repository } from 'typeorm';
 import { CreateTestResultInput } from './dto/create-test-result.input';
 import { UpdateTestResultInput } from './dto/update-test-result.input';
 import { TestResult } from './entities/test-result.entity';
+import { MyLogger } from 'src/logger/my-loger.service';
 
 
 @Injectable()
 export class TestResultsService {
     constructor(
+        private readonly myLogger: MyLogger,
         @InjectRepository(TestResult) private readonly testResultRepository: Repository<TestResult>,
         @Inject(UsersService) private readonly userService: UsersService,
         @Inject(PapersService) private readonly paperService: PapersService
-    ) { }
+    ) {
+        this.myLogger.setContext('TestResultsService');
+    }
 
     async create({ userId, paperId }: CreateTestResultInput): Promise<TestResult> {
-        // 무결성 체크
         const testResultExist = await this.testResultRepository.findOneBy({
             userId: userId,
             paperId: paperId
         });
 
         if (testResultExist) {
+            this.myLogger.error(`user ${userId} already did or doing ${paperId}`)
             throw new BadRequestException(`user ${userId} already did or doing ${paperId}`);
         }
 
@@ -36,11 +40,13 @@ export class TestResultsService {
 
         const user = await this.userService.findOneById(userId);
         if (!user) {
+            this.myLogger.error(`user: ${userId} not found`)
             throw new NotFoundException(`user: ${userId} not found`);
         }
 
         const paper = await this.paperService.findOneBy(paperId);
         if (!paper) {
+            this.myLogger.error(`paper: ${paperId} not found`);
             throw new NotFoundException(`paper: ${paperId} not found`);
         }
 
@@ -65,6 +71,7 @@ export class TestResultsService {
         });
 
         if (!testResult) {
+            this.myLogger.error(`TestResult of userId: ${userId} and paperId: ${paperId} not found`);
             throw new NotFoundException(`TestResult of userId: ${userId} and paperId: ${paperId} not found`);
         }
 
@@ -78,17 +85,13 @@ export class TestResultsService {
     }
 
     async update(userId: number, paperId: number, updateTestResultInput: Partial<UpdateTestResultInput>): Promise<TestResult> {
-        // const user = await this.userRepository.preload({
-        //     id: id,
-        //     ...updateUserInput,
-        // });
-
         const testResult = await this.testResultRepository.findOneBy({
             userId: userId,
             paperId: paperId
         });
 
         if (!testResult) {
+            this.myLogger.error(`TestResult of userId: ${userId} and paperId: ${paperId} not found`);
             throw new NotFoundException(`TestResult of userId: ${userId} and paperId: ${paperId} not found`);
         }
 
@@ -103,6 +106,7 @@ export class TestResultsService {
         });
 
         if (!testResult) {
+            this.myLogger.error(`TestResult of userId: ${userId} and paperId: ${paperId} not found`);
             throw new NotFoundException(`TestResult of userId: ${userId} and paperId: ${paperId} not found`);
         }
 
@@ -110,10 +114,11 @@ export class TestResultsService {
     }
 
     async findAllSubmittedTestResults() {
-        return await this.testResultRepository.find({
-            where: {
-                isSubmitted: true
-            }
-        })
+        return await this.testResultRepository.createQueryBuilder('testResult')
+            .leftJoinAndSelect('testResult.user', 'user')
+            .leftJoinAndSelect('testResult.paper', 'paper')
+            .leftJoinAndSelect('testResult.testChoices', 'testChoices')
+            .where('testResult.isSubmitted = :isSubmitted', { isSubmitted: true })
+            .getMany();
     }
 }

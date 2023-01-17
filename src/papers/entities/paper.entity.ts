@@ -14,12 +14,10 @@ export class Paper {
     @Field((type) => String)
     name: string;
 
-    // paper는 있는데 testResults없을 수 있음. 
     @OneToMany(() => TestResult, (testResult) => testResult.paper)
     @Field((type) => [TestResult], { nullable: 'itemsAndList' })
     testResults: TestResult[]
-
-    // paper는 있는데 questions없을 수 있음 
+ 
     @OneToMany(() => Question, (question) => question.paper)
     @Field((type) => [Question], { nullable: 'itemsAndList' })
     questions: Question[]

@@ -5,14 +5,21 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BadRequestException } from '@nestjs/common/exceptions';
+import { MyLogger } from 'src/logger/my-loger.service';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) { }
+    constructor(
+        private myLogger: MyLogger,
+        @InjectRepository(User) private readonly userRepository: Repository<User>
+    ) {
+        this.myLogger.setContext("UsersService");
+    }
 
     async create({ email }: CreateUserInput): Promise<User> {
         const emailExist = await this.userRepository.findOneBy({ email: email })
         if (emailExist) {
+            this.myLogger.error(`email ${email} already exist. choose others.`);
             throw new BadRequestException(`email ${email} already exist. choose others.`)
         }
 
@@ -30,6 +37,7 @@ export class UsersService {
         const user = await this.userRepository.findOneBy({ id: id });
 
         if (!user) {
+            this.myLogger.error(`User #${id} not found`);
             throw new NotFoundException(`User #${id} not found`);
         }
 
@@ -43,15 +51,17 @@ export class UsersService {
         const user = await this.userRepository.findOneBy({ id: id });
 
         if (!user) {
-            throw new NotFoundException(`User #${id} not found`)
+            this.myLogger.error(`User #${id} not found`);
+            throw new NotFoundException(`User #${id} not found`);
         }
 
         const emailExist = await this.userRepository.findOneBy({
             email: updateUserInput.email
         })
-        // email같더라도 기존에 자신이 사용하던 거면 그대로 써도 되니까. 
+
         if (emailExist && emailExist.id !== id) {
-            throw new BadRequestException(`email ${updateUserInput.email} already used by other. update to another one`)
+            this.myLogger.error(`email ${updateUserInput.email} already used by other. update to another one`);
+            throw new BadRequestException(`email ${updateUserInput.email} already used by other. update to another one`);
         }
 
         Object.assign(user, updateUserInput);
@@ -62,6 +72,7 @@ export class UsersService {
         const user = await this.userRepository.findOneBy({ id: id });
 
         if (!user) {
+            this.myLogger.error(`User #${id} not found`);
             throw new NotFoundException(`User #${id} not found`);
         }
 

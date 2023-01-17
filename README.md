@@ -1,30 +1,59 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Title
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Maumlab assignment
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Application purpose
+
+* 중복응답이 가능한 설문지 작성
+
+### Technologies
+* TypeScript
+* NestJS
+* GraphQL
+* TypeORM
+* PostgreSQL
+* Apollo Server
+
+### Constraints
+* 한 설문지의 문제 갯수는 최대 100개로 제한
+* 한 문제의 문항갯수는 최대 10개로 제한
+
+### Details
+* 개발 편의를 위해 db synchronization
+
+
+## DB
+### ERD
+![alt text](./img/maumlab_db_schema_img.png)
+
+### Description
+* User
+    * 사용자 정보
+    * PK: user_id
+* Paper
+    * 설문지 정보
+    * PK: paper_id
+* Question
+    * 설문지의 질문 정보
+    * PK: question_num + paper_id
+    * 한 개의 설문지에는 여러개의 질문이 있으므로 Paper : Question = 1 : N. 그러나 한 개의 설문지에서 동일한 질문을 하면 안되므로 Question_num과 Paper_id를 Composite Key로 구성
+    * question_num은 설문지 작성자가 수동으로 입력. 각 설문에서 질문번호 의미. 
+* Option
+    * 설문지의 질문의 문항 정보
+    * PK: option_num + paper_id + question_num
+    * 한 개의 질문에는 여러개의 문항이 있으므로 Question : Option = 1 : N. 그러나 한 개의 질문에 동일한 문항이 나오면 안되므로 question_num과 option_num을 Compoite Key로 구성하고 한 개의 설문지에 동일한 질문과 문항이 반복되면 안되므로 Composite Key에 paper_id 추가. 
+    * option_num은 설문지 작성자가 수동으로 입력. 각 질문에서 문항번호 의미.
+* Test_result
+    * 사용자의 설문에 대한 결과 정보
+    * PK: user_id + paper_id
+    * 한 명의 사용자가 여러개의 다른 설문을 할 수 있으므로 User : Paper = 1: N. 그러나 동일한 설문은 두 번 이상 못하는게 일반적이므로  UserId와 PaperId를 Composite Key로 구성
+* Test_choice
+    * 사용자가 설문의 각 질문에 대해 어떤 문항을 선택했는지에 대한 정보
+    * PK: user_id + paper_id + question_num + option_num
+    * 한 개의 설문지에서 유저는 여러개의 질문에 대한 답을 해야하므로 Test_result : Test_choices = 1: N. User가 설문지의 각 질문에 대해 모든 문항에 반드시 체크해야 되는건 아니기 때문에 Test_choice : Option = 0 or 1 : 1. 한 명의 사용자가 수행한 설문에서 각 질문에 어떤 문항을 선택했냐에 대한 값을 담고있기 때문에 user_id, paper_id, question_id를 Composite Key로 가지며 한 질문에 대해 중복선택이 가능하므로 option_num을 Composite Key에 추가
+
 
 ## Installation
 
@@ -44,30 +73,3 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

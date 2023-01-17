@@ -5,12 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TestResult } from './entities/test-result.entity';
 import { UsersModule } from 'src/users/users.module';
 import { PapersModule } from 'src/papers/papers.module';
+import { LoggerModule } from 'src/logger/logger.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([TestResult]),
     UsersModule,
-    PapersModule
+    PapersModule,
+    LoggerModule
   ],
   providers: [TestResultsService, TestResultsResolver],
   exports: [TestResultsService]
