@@ -51,7 +51,11 @@ export class TestResultsService {
     }
 
     async findAll(): Promise<Array<TestResult>> {
-        return await this.testResultRepository.find();
+        return await this.testResultRepository.createQueryBuilder('testResult')
+            .leftJoinAndSelect('testResult.user', 'user')
+            .leftJoinAndSelect('testResult.paper', 'paper')
+            .leftJoinAndSelect('testResult.testChoices', 'testChoices')
+            .getMany();
     }
 
     async findOneBy(userId: number, paperId: number): Promise<TestResult> {
@@ -64,10 +68,16 @@ export class TestResultsService {
             throw new NotFoundException(`TestResult of userId: ${userId} and paperId: ${paperId} not found`);
         }
 
-        return testResult;
+        return await this.testResultRepository.createQueryBuilder('testResult')
+            .leftJoinAndSelect('testResult.user', 'user')
+            .leftJoinAndSelect('testResult.paper', 'paper')
+            .leftJoinAndSelect('testResult.testChoices', 'testChoices')
+            .where('testResult.userId = :testResultUserId', { testResultUserId: userId })
+            .andWhere('testResult.paperId = :testResultPaperId', { testResultPaperId: paperId })
+            .getOne();
     }
 
-    async update(userId: number, paperId: number, updateTestResultInput: UpdateTestResultInput): Promise<TestResult> {
+    async update(userId: number, paperId: number, updateTestResultInput: Partial<UpdateTestResultInput>): Promise<TestResult> {
         // const user = await this.userRepository.preload({
         //     id: id,
         //     ...updateUserInput,
@@ -97,5 +107,13 @@ export class TestResultsService {
         }
 
         return await this.testResultRepository.remove(testResult);
+    }
+
+    async findAllSubmittedTestResults() {
+        return await this.testResultRepository.find({
+            where: {
+                isSubmitted: true
+            }
+        })
     }
 }

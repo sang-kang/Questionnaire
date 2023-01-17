@@ -11,10 +11,6 @@ export class QuestionsResolver {
 
     @Mutation(returns => Question)
     createQuestion(@Args('createQuestionInput') createQuestionInput: CreateQuestionInput): Promise<Question> {
-        console.log('questionNum: ', createQuestionInput.questionNum)
-        console.log('paperId: ', createQuestionInput.paperId)
-        console.log('content: ', createQuestionInput.content)
-        
         return this.questionService.create(createQuestionInput);
     }
 

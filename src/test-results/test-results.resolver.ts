@@ -37,10 +37,26 @@ export class TestResultsResolver {
     }
 
     @Mutation(returns => TestResult)
-    removetestResult(
+    removeTestResult(
         @Args('userId') userId: number,
         @Args('paperId') paperId: number,
     ) {
         return this.testResultService.remove(userId, paperId);
     }
+
+    // update와 분리해야 하나?
+    @Mutation(returns => TestResult)
+    submitTestResult(
+        @Args('userId') userId: number,
+        @Args('paperId') paperId: number,
+        @Args('updateTestResultInput') updateTestResultInput: UpdateTestResultInput
+    ) {
+        return this.testResultService.update(userId, paperId, updateTestResultInput)
+    }
+
+    @Query(returns => [TestResult])
+    findAllSubmittedTestResults() {
+        return this.testResultService.findAllSubmittedTestResults();
+    }
+
 }

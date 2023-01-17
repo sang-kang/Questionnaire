@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePaperInput } from './dto/create-paper.input';
@@ -9,17 +9,23 @@ import { Paper } from './entities/paper.entity';
 @Injectable()
 export class PapersService {
 
-    constructor(
-        @InjectRepository(Paper) private paperRepository: Repository<Paper>
-    ) { }
+    constructor(@InjectRepository(Paper) private paperRepository: Repository<Paper>) { }
 
-    async create(createPaperInput: CreatePaperInput): Promise<Paper> {
-        const paper = this.paperRepository.create(createPaperInput);
+    async create({ name }: CreatePaperInput): Promise<Paper> {
+        const nameExist = await this.paperRepository.findOneBy({ name: name })
+        if (nameExist) {
+            throw new BadRequestException(`name ${name} already exist. choose others.`)
+        }
+
+        const paper = this.paperRepository.create({ name: name });
         return await this.paperRepository.save(paper);
     }
 
     async findAll(): Promise<Array<Paper>> {
-        return await this.paperRepository.find();
+        return await this.paperRepository.createQueryBuilder('paper')
+            .leftJoinAndSelect('paper.testResults', 'testResults')
+            .leftJoinAndSelect('paper.questions', 'questions')
+            .getMany();
     }
 
     async findOneBy(id: number): Promise<Paper> {
@@ -29,7 +35,11 @@ export class PapersService {
             throw new NotFoundException(`Paper #${id} not found`);
         }
 
-        return paper;
+        return await this.paperRepository.createQueryBuilder('paper')
+            .leftJoinAndSelect('paper.testResults', 'testResults')
+            .leftJoinAndSelect('paper.questions', 'questions')
+            .where('paper.id = :paperId', { paperId: id })
+            .getOne();
     }
 
     async update(id: number, updatePaperInput: UpdatePaperInput): Promise<Paper> {
@@ -37,6 +47,11 @@ export class PapersService {
 
         if (!paper) {
             throw new NotFoundException(`Paper #${id} not found`)
+        }
+
+        const nameExist = await this.paperRepository.findOneBy({ name: updatePaperInput.name })
+        if (nameExist && nameExist.id !== id) {
+            throw new BadRequestException(`name ${updatePaperInput.name} already used by other. update to another one.`)
         }
 
         Object.assign(paper, updatePaperInput);

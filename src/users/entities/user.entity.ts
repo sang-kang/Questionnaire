@@ -1,12 +1,11 @@
-import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
-import { TestChoice } from 'src/test-choices/entities/test-choice.entity';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { TestResult } from 'src/test-results/entities/test-result.entity';
-import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType({ description: 'user ' })
 export class User {
-  @PrimaryGeneratedColumn()  // FIXME: PrimaryGeneratedColumn 
+  @PrimaryGeneratedColumn()
   @Field((type) => ID)
   id: number;
 
@@ -14,7 +13,8 @@ export class User {
   @Field()
   email: string;
 
+  // user는 있는데 testResult는 없을 수 잇음. 
   @OneToMany(() => TestResult, (testResult) => testResult.user)
-  @Field(() => [TestResult])
+  @Field((type) => [TestResult], { nullable: 'itemsAndList' })
   testResults: TestResult[]
 }

@@ -24,7 +24,7 @@ type TestChoice {
   optionQuestionPaperId: ID!
   optionQuestionNum: ID!
   testResult: TestResult!
-  option: User!
+  option: User
   score: Int!
 }
 
@@ -34,7 +34,7 @@ type Option {
   questionNum: ID!
   questionPaperId: ID!
   question: Question!
-  testChoice: TestChoice!
+  testChoice: TestChoice
   score: Int!
   content: String!
 }
@@ -44,7 +44,7 @@ type Question {
   num: ID!
   paperId: ID!
   paper: Paper!
-  options: [Option!]!
+  options: [Option]
   content: String!
 }
 
@@ -52,8 +52,8 @@ type Question {
 type Paper {
   id: ID!
   name: String!
-  testResults: [TestResult!]!
-  questions: [Question!]!
+  testResults: [TestResult]
+  questions: [Question]
 }
 
 """test_result """
@@ -62,7 +62,7 @@ type TestResult {
   paperId: ID!
   user: User!
   paper: Paper!
-  testChoices: [TestChoice!]!
+  testChoices: [TestChoice]
   totalScore: Int!
   isSubmitted: Boolean!
 }
@@ -71,7 +71,7 @@ type TestResult {
 type User {
   id: ID!
   email: String!
-  testResults: [TestResult!]!
+  testResults: [TestResult]
 }
 
 type Query {
@@ -83,6 +83,8 @@ type Query {
   papers: [Paper!]!
   testResult(userId: Float!, paperId: Float!): TestResult!
   testResults: [TestResult!]!
+  findAllSubmittedTestResults: [TestResult!]!
+  testChoices: [TestChoice!]!
   option(optionNum: Float!, questionNum: Float!, paperId: Float!): Option!
   options: [Option!]!
   question(questionNum: Float!, paperId: Float!): Question!
@@ -102,10 +104,12 @@ type Mutation {
   """user start test"""
   createTestResult(createTestResultInput: CreateTestResultInput!): TestResult!
   updateTestResult(userId: Float!, paperId: Float!, updateTestResultInput: UpdateTestResultInput!): TestResult!
-  removetestResult(userId: Float!, paperId: Float!): TestResult!
+  removeTestResult(userId: Float!, paperId: Float!): TestResult!
+  submitTestResult(userId: Float!, paperId: Float!, updateTestResultInput: UpdateTestResultInput!): TestResult!
 
   """user serlect option"""
   createTestChoice(createTestChoiceInput: CreateTestChoiceInput!): TestChoice!
+  updateTestChoice(userId: Float!, paperId: Float!, questionNum: Float!, originalOptionNum: Float!, updateTestChoiceInput: UpdateTestChoiceInput!): TestChoice!
   createOption(createOptionInput: CreateOptionInput!): Option!
   updateOption(optionNum: Float!, questionNum: Float!, paperId: Float!, updateOptionInput: UpdateOptionInput!): Option!
   removeOption(optionNum: Float!, questionNum: Float!, paperId: Float!): Option!
@@ -142,8 +146,6 @@ input CreateTestResultInput {
 }
 
 input UpdateTestResultInput {
-  userId: ID
-  paperId: ID
   totalScore: Int!
   isSubmitted: Boolean!
 }
@@ -152,6 +154,10 @@ input CreateTestChoiceInput {
   userId: Int!
   paperId: Int!
   questionNum: Int!
+  optionNum: Int!
+}
+
+input UpdateTestChoiceInput {
   optionNum: Int!
 }
 
@@ -164,11 +170,8 @@ input CreateOptionInput {
 }
 
 input UpdateOptionInput {
-  optionNum: Int
-  paperId: Int
-  questionNum: Int
-  score: Int
-  content: String
+  score: Int!
+  content: String!
 }
 
 input CreateQuestionInput {
@@ -178,9 +181,7 @@ input CreateQuestionInput {
 }
 
 input UpdateQuestionInput {
-  questionNum: Int
-  paperId: Int
-  content: String
+  content: String!
 }
 
 type Subscription {

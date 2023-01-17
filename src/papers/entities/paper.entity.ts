@@ -1,31 +1,26 @@
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
-import { Option } from 'src/options/entities/option.entity';
 import { Question } from 'src/questions/entities/question.entity';
-import { TestChoice } from 'src/test-choices/entities/test-choice.entity';
 import { TestResult } from 'src/test-results/entities/test-result.entity';
-import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType({ description: 'paper ' })
 export class Paper {
-    @PrimaryGeneratedColumn()  // FIXME: PrimaryGeneratedColumn
+    @PrimaryGeneratedColumn()
     @Field((type) => ID)
     id: number;
 
     @Column()
-    @Field(() => String)
+    @Field((type) => String)
     name: string;
 
+    // paper는 있는데 testResults없을 수 있음. 
     @OneToMany(() => TestResult, (testResult) => testResult.paper)
-    @Field(() => [TestResult])
+    @Field((type) => [TestResult], { nullable: 'itemsAndList' })
     testResults: TestResult[]
-    
+
+    // paper는 있는데 questions없을 수 있음 
     @OneToMany(() => Question, (question) => question.paper)
-    @Field(() => [Question])
+    @Field((type) => [Question], { nullable: 'itemsAndList' })
     questions: Question[]
-
-    // @OneToMany(() => Option, (option) => option.paper)
-    // @Field(() => [Option])
-    // options: Option[]
-
 }

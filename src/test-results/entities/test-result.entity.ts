@@ -2,7 +2,7 @@ import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
 import { Paper } from 'src/papers/entities/paper.entity';
 import { TestChoice } from 'src/test-choices/entities/test-choice.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 @ObjectType({ description: 'test_result ' })
@@ -15,16 +15,16 @@ export class TestResult {
     @Field((type) => ID)
     paperId: number;
 
-    @ManyToOne(() => User, (user: User) => user.testResults)
+    @ManyToOne(() => User, (user: User) => user.testResults, { eager: true })
     @Field((type) => User)
     user: User
 
-    @ManyToOne(() => Paper, (paper: Paper) => paper.testResults)
+    @ManyToOne(() => Paper, (paper: Paper) => paper.testResults, { eager: true })
     @Field((type) => Paper)
     paper: Paper
 
     @OneToMany(() => TestChoice, (testChoice: TestChoice) => testChoice.testResult)
-    @Field((type) => [TestChoice])
+    @Field((type) => [TestChoice], { nullable: 'itemsAndList' })
     testChoices: TestChoice[]
 
     @Column()

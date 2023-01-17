@@ -29,7 +29,7 @@ export class QuestionsService {
             num: questionNum,
             content: content
         });
-        
+
         const paper = await this.paperService.findOneBy(paperId);
         if (!paper) {
             throw new NotFoundException('Cannot find the paper. A question must be under paper.')
@@ -40,7 +40,10 @@ export class QuestionsService {
     }
 
     async findAll(): Promise<Array<Question>> {
-        return await this.questionRepository.find();
+        return await this.questionRepository.createQueryBuilder('question')
+            .leftJoinAndSelect('question.options', 'options')
+            .leftJoinAndSelect('question.paper', 'paper')
+            .getMany();
     }
 
     async findOneBy(questionNum: number, paperId: number): Promise<Question> {
@@ -53,7 +56,12 @@ export class QuestionsService {
             throw new NotFoundException(`question num ${questionNum} at paper ${paperId} not found`);
         }
 
-        return question;
+        return await this.questionRepository.createQueryBuilder('question')
+            .leftJoinAndSelect('question.options', 'options')
+            .leftJoinAndSelect('question.paper', 'paper')
+            .where('question.num = :questionNum', { questionNum: questionNum })
+            .andWhere('question.paperId = :questionPaperId', { questionPaperId: paperId })
+            .getOne();
     }
 
     async update(questionNum: number, paperId: number, updateQuestionInput: UpdateQuestionInput): Promise<Question> {
