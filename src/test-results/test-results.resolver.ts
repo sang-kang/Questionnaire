@@ -9,7 +9,7 @@ export class TestResultsResolver {
 
     constructor(private readonly testResultService: TestResultsService) { }
 
-    @Mutation(returns => TestResult, { description: 'user start test' })
+    @Mutation(returns => TestResult)
     createTestResult(@Args('createTestResultInput') createTestResultInput: CreateTestResultInput) {
         return this.testResultService.create(createTestResultInput);
     }

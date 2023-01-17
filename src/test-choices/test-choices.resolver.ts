@@ -8,7 +8,7 @@ import { TestChoicesService } from './test-choices.service';
 export class TestChoicesResolver {
     constructor(private readonly testChoiceService: TestChoicesService) { }
 
-    @Mutation(returns => TestChoice, { description: 'user serlect option' })
+    @Mutation(returns => TestChoice)
     createTestChoice(@Args('createTestChoiceInput') createTestChoiceInput: CreateTestChoiceInput): Promise<TestChoice> {
         return this.testChoiceService.create(createTestChoiceInput);
     }

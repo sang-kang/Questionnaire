@@ -84,14 +84,10 @@ type Mutation {
   createPaper(createPaperInput: CreatePaperInput!): Paper!
   updatePaper(id: Float!, updatePaperInput: UpdatePaperInput!): Paper!
   removePaper(id: Float!): Paper!
-
-  """user start test"""
   createTestResult(createTestResultInput: CreateTestResultInput!): TestResult!
   updateTestResult(userId: Float!, paperId: Float!, updateTestResultInput: UpdateTestResultInput!): TestResult!
   removeTestResult(userId: Float!, paperId: Float!): TestResult!
   submitTestResult(userId: Float!, paperId: Float!, updateTestResultInput: UpdateTestResultInput!): TestResult!
-
-  """user serlect option"""
   createTestChoice(createTestChoiceInput: CreateTestChoiceInput!): TestChoice!
   updateTestChoice(userId: Float!, paperId: Float!, questionNum: Float!, originalOptionNum: Float!, updateTestChoiceInput: UpdateTestChoiceInput!): TestChoice!
   createOption(createOptionInput: CreateOptionInput!): Option!
