@@ -21,8 +21,9 @@ Maumlab assignment
 * 한 문제의 문항갯수는 최대 10개로 제한
 
 ### Details
-* 개발 편의를 위해 db synchronization
-
+* http://localhost:4000/에서 구동
+* GraphQL Playground환경으로 가려면 http://localhost:4000/graphql 로 이동 필요
+* 개발 편의를 위해 synchronize: true
 
 ## DB
 ### ERD
@@ -64,12 +65,6 @@ $ npm install
 ## Running the app
 
 ```bash
-# development
 $ npm run start
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```

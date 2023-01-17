@@ -2,7 +2,6 @@ import { Inject, Injectable, BadRequestException, NotFoundException } from '@nes
 import { InjectRepository } from '@nestjs/typeorm';
 import { OptionsService } from 'src/options/options.service';
 import { UpdateTestResultInput } from 'src/test-results/dto/update-test-result.input';
-import { TestResult } from 'src/test-results/entities/test-result.entity';
 import { TestResultsService } from 'src/test-results/test-results.service';
 import { Repository } from 'typeorm';
 import { CreateTestChoiceInput } from './dto/create-test-choice.input';

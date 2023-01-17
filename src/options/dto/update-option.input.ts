@@ -1,10 +1,10 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsString } from 'class-validator';
-import { CreateOptionInput } from './create-option.input';
+import { IsString, IsInt } from 'class-validator';
 
 @InputType()
 export class UpdateOptionInput {
     @Field(type => Int)
+    @IsInt()
     score?: number
 
     @Field(type => String)

@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Question } from 'src/questions/entities/question.entity';
 import { TestResult } from 'src/test-results/entities/test-result.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -17,7 +17,7 @@ export class Paper {
     @OneToMany(() => TestResult, (testResult) => testResult.paper)
     @Field((type) => [TestResult], { nullable: 'itemsAndList' })
     testResults: TestResult[]
- 
+
     @OneToMany(() => Question, (question) => question.paper)
     @Field((type) => [Question], { nullable: 'itemsAndList' })
     questions: Question[]

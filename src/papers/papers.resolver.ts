@@ -1,8 +1,7 @@
-import { Args, Context, Info, Mutation, Parent, Query, ResolveProperty, Resolver, Root } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreatePaperInput } from './dto/create-paper.input';
 import { UpdatePaperInput } from './dto/update-paper.input';
 import { Paper } from './entities/paper.entity';
-
 import { PapersService } from './papers.service';
 
 @Resolver(of => Paper)
